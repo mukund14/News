@@ -86,59 +86,6 @@ from_list=from_dt(last_30(datetime.today()))
 to_list=to_dt(last_30(datetime.today()))
 
 
-# In[5]:
-
-
-import nltk
-from nltk.chat.util import Chat, reflections
-import re
-
-class Muku_Chat(Chat):
-
-    def __init__(self, pairs, reflections={}):
-
-        # add `z` because now items in pairs have three elements
-        self._pairs = [(re.compile(x, re.IGNORECASE), y, z) for (x, y, z) in pairs]
-        self._reflections = reflections
-        self._regex = self._compile_reflections()
-    def converse(self, quit="quit"):
-        user_input = ""
-        while user_input != quit:
-            user_input = quit
-            try:
-                user_input = input(">")
-            except EOFError:
-                print(user_input)
-            if user_input:
-                while user_input[-1] in "!.":
-                    user_input = user_input[:-1]
-                print(self.respond(user_input))
-
-    def respond(self, str):
-
-        # add `callback` because now items in pairs have three elements
-        for (pattern, response, callback) in self._pairs:
-            match = pattern.match(str)
-
-            if match:
-
-                resp = random.choice(response)
-                resp = self._wildcards(resp, match)
-
-                if resp[-2:] == '?.':
-                    resp = resp[:-2] + '.'
-                if resp[-2:] == '??':
-                    resp = resp[:-2] + '?'
-
-                # run `callback` if exists  
-                if callback: # eventually: if callable(callback):
-                    callback(match)
-
-                return resp
-
-
-# In[6]:
-
 
 # /v2/everythin
 #class query(chat):
